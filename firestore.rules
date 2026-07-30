@@ -1,0 +1,71 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function: Check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function: Check if authenticated user belongs to the target household
+    function isHouseholdMember(householdId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/households/$(householdId)/members/$(request.auth.uid));
+    }
+    
+    // Helper function: Check if user has admin role in household
+    function isHouseholdAdmin(householdId) {
+      return isHouseholdMember(householdId) &&
+        get(/databases/$(database)/documents/households/$(householdId)/members/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Household root document rules
+    match /households/{householdId} {
+      // Any signed-in user can create a household
+      allow create: if isSignedIn();
+      
+      // Only members of the household can read household details
+      allow read: if isHouseholdMember(householdId);
+      
+      // Only admin members can update household settings or subscription status
+      allow update, delete: if isHouseholdAdmin(householdId);
+      
+      // Members subcollection rules
+      match /members/{userId} {
+        // Members can read fellow members of their household
+        allow read: if isHouseholdMember(householdId) || request.auth.uid == userId;
+        
+        // Signed in users can add themselves during onboarding or invite
+        allow create: if isSignedIn() && (request.auth.uid == userId || isHouseholdAdmin(householdId));
+        
+        // Members can update their own profile; admins can update roles
+        allow update: if isSignedIn() && (request.auth.uid == userId || isHouseholdAdmin(householdId));
+        
+        // Only admins can delete members
+        allow delete: if isHouseholdAdmin(householdId);
+      }
+      
+      // List items subcollection rules
+      match /listItems/{itemId} {
+        // Any member of the household can view list items
+        allow read: if isHouseholdMember(householdId);
+        
+        // Any member can create new items in their household list
+        allow create: if isHouseholdMember(householdId) 
+          && request.resource.data.addedBy.userId == request.auth.uid;
+        
+        // Any member can update items (e.g. mark bought, change qty, update status)
+        allow update: if isHouseholdMember(householdId);
+        
+        // Any member can delete items from their household list
+        allow delete: if isHouseholdMember(householdId);
+      }
+    }
+    
+    // Default deny all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

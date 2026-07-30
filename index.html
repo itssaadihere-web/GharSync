@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GharSync - Multi-Group Workspace with Task Claiming & Permission Rules</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="mobile-container">
+
+    <!-- 1. SPLASH SCREEN -->
+    <div id="screenSplash" class="screen-layer">
+      <div class="splash-content">
+        <div class="splash-logo">🏡</div>
+        <h1 class="splash-title">GharSync</h1>
+        <p class="splash-subtitle">WhatsApp-Style Family & Office Coordination</p>
+        <div class="splash-spinner"></div>
+      </div>
+    </div>
+
+    <!-- 2. LOGIN / AUTH SCREEN -->
+    <div id="screenLogin" class="screen-layer hidden">
+      <div class="auth-card">
+        <div class="brand-badge">🏡 GharSync Workspace</div>
+        <h2>Welcome to GharSync</h2>
+        <p>Choose your member persona to test Creator & Assignee permissions:</p>
+
+        <div class="form-group">
+          <label>Select User Persona</label>
+          <select id="userPersonaSelect">
+            <option value="Sadi">👤 Sadi (Family Member)</option>
+            <option value="Ammi">👤 Ammi (Admin / Creator)</option>
+            <option value="Abbu">👤 Abbu (Runner / Creator)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="loginPhone" value="+92 300 1234567" placeholder="+92 300 0000000" />
+        </div>
+
+        <button id="loginBtn" class="btn-primary">Enter Workspace</button>
+      </div>
+    </div>
+
+    <!-- 3. GROUPS LIST SCREEN (WhatsApp Style Chats List) -->
+    <div id="screenGroupsList" class="screen-layer hidden">
+      <header class="app-header">
+        <div class="header-left">
+          <h2>GharSync</h2>
+          <span class="user-pill" id="activeUserPill">👤 Sadi</span>
+        </div>
+        <div class="header-actions">
+          <button id="newGroupBtn" class="header-btn">+ Group</button>
+        </div>
+      </header>
+
+      <div class="search-bar-container">
+        <input type="text" placeholder="Search chats, tasks or groups..." id="groupSearchInput" />
+      </div>
+
+      <div class="groups-section-title">YOUR ACTIVE GROUPS</div>
+
+      <div id="groupsListContainer" class="groups-list">
+        <!-- Injected dynamically -->
+      </div>
+
+      <button id="fabNewGroup" class="fab-btn">+</button>
+    </div>
+
+    <!-- 4. INSIDE GROUP WORKSPACE (4 Screens: Chat, Purchases, Tasks, Group Settings) -->
+    <div id="screenGroupWorkspace" class="screen-layer hidden">
+      <!-- Group Header -->
+      <header class="workspace-header">
+        <button id="backToGroupsBtn" class="back-btn">‹</button>
+        <div class="group-header-info">
+          <h3 id="currentGroupName">Khan Family Household 🏡</h3>
+          <span id="currentGroupSub" class="sub-text">3 members • 4 pending purchases</span>
+        </div>
+        <button id="openGroupSettingsHeaderBtn" class="icon-btn">⚙️</button>
+      </header>
+
+      <!-- Sub-Navigation Tabs inside Group (4 Screens) -->
+      <nav class="group-sub-nav">
+        <button class="sub-tab active" data-subtab="tabChat">
+          <span>💬 Chat</span>
+        </button>
+        <button class="sub-tab" data-subtab="tabPurchasing">
+          <span>🛒 Purchases (<span id="tabPurchasingBadge">4</span>)</span>
+        </button>
+        <button class="sub-tab" data-subtab="tabTasks">
+          <span>📋 Tasks (<span id="tabTasksBadge">2</span>)</span>
+        </button>
+        <button class="sub-tab" data-subtab="tabSettings">
+          <span>⚙️ Settings</span>
+        </button>
+      </nav>
+
+      <!-- SCREEN 1: CHAT FEED WITH INLINE AI EXTRACTION -->
+      <div id="tabChat" class="workspace-tab active">
+        <div id="chatMessagesContainer" class="chat-feed">
+          <!-- Messages injected dynamically -->
+        </div>
+
+        <div class="chat-input-bar">
+          <button id="voiceNoteBtn" class="mic-chat-btn" title="Voice Note Input">🎙️</button>
+          <input type="text" id="chatMessageInput" placeholder="Message or type task (e.g. 'Sadi fill water bottles today')..." />
+          <button id="sendChatBtn" class="send-btn">➤</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: PURCHASING LIST & STORE RUNNER MODE -->
+      <div id="tabPurchasing" class="workspace-tab">
+        <div class="purchasing-toolbar">
+          <button id="toggleRunnerModeBtn" class="btn-runner-mode">🛍️ Store Runner Mode</button>
+          <span id="priceEstimatePill" class="estimate-pill">Est: PKR 1,400</span>
+        </div>
+
+        <div class="permission-notice">
+          ℹ️ <strong>Permission Rule</strong>: Anyone can mark items bought, but only the creator can delete an item.
+        </div>
+
+        <div id="purchasingItemsList" class="items-list">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- SCREEN 3: TASKS SCREEN (Assigned & General Unassigned Tasks + Claiming) -->
+      <div id="tabTasks" class="workspace-tab">
+        <div class="google-sync-banner">
+          <div class="g-icon">📅</div>
+          <div>
+            <strong>Google Tasks & Calendar Auto-Sync</strong>
+            <p>Claimed & assigned tasks automatically sync to your personal Google Calendar.</p>
+          </div>
+        </div>
+
+        <!-- Task Category Tabs: Pending vs Archive -->
+        <div class="task-filter-chips">
+          <button class="task-chip active" id="taskFilterPending">Pending Tasks (<span id="pendingTasksCount">2</span>)</button>
+          <button class="task-chip" id="taskFilterCompleted">Completed Archive (<span id="completedTasksCount">1</span>)</button>
+        </div>
+
+        <div id="tasksListContainer" class="tasks-list">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+
+      <!-- SCREEN 4: GROUP SETTINGS & CONNECTED FEATURES -->
+      <div id="tabSettings" class="workspace-tab">
+        <div class="settings-card">
+          <h4>Group Details</h4>
+          <div class="form-group" style="margin-top:10px;">
+            <label>Group Name</label>
+            <input type="text" id="editGroupNameInput" value="Khan Family Household 🏡" />
+          </div>
+          <button id="saveGroupNameBtn" class="btn-sm" style="background:var(--primary-emerald);">Save Group Name</button>
+        </div>
+
+        <div class="settings-card">
+          <h4>Shareable Group Invite URL</h4>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">Share this link to invite family members into this group:</p>
+          <div class="code-box">
+            <span id="groupShareUrl">https://gharsync.app/join?code=GHAR-786-KHAN</span>
+            <button id="copyShareUrlBtn" class="copy-btn">Copy Link</button>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <h4>Connected Integrations</h4>
+          <div class="integration-row">
+            <span>📅 Google Tasks & Calendar Auto-Sync</span>
+            <span class="status-active">CONNECTED</span>
+          </div>
+          <div class="integration-row">
+            <span>💬 WhatsApp Webhook Bot Ingestion</span>
+            <span class="status-active">CONNECTED</span>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="flex-between">
+            <h4>Group Members</h4>
+            <button id="inviteMemberSettingsBtn" class="btn-sm">+ Invite</button>
+          </div>
+          <div id="settingsMembersList" class="members-list" style="margin-top:10px;">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW GROUP CREATION MODAL -->
+    <div id="createGroupModal" class="modal hidden">
+      <div class="modal-card">
+        <button class="close-modal" id="closeCreateGroupBtn">&times;</button>
+        <h3>Create New Shared Group</h3>
+
+        <div class="form-group">
+          <label>Group Name</label>
+          <input type="text" id="newGroupNameInput" placeholder="e.g. Office Colleagues, Khan Family..." />
+        </div>
+
+        <div class="form-group">
+          <label>Group Category</label>
+          <select id="newGroupCategorySelect">
+            <option value="family">🏡 Family Household</option>
+            <option value="office">💼 Office / Work Team</option>
+            <option value="friends">⚡ Friends / Roommates</option>
+          </select>
+        </div>
+
+        <button id="confirmCreateGroupBtn" class="btn-primary">Create Group</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
