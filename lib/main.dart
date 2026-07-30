@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'routing/app_router.dart';
-import 'services/fcm_service.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  try {
-    await Firebase.initializeApp();
-    await FcmService().initialize();
-  } catch (e) {
-    debugPrint('Firebase initial setup note: $e');
-  }
-
-  runApp(
-    const ProviderScope(
-      child: GharSyncApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: GharSyncApp()));
 }
 
 class GharSyncApp extends ConsumerWidget {
@@ -30,9 +16,11 @@ class GharSyncApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
-      title: 'GharSync - Household Grocery App',
+      title: 'GharSync',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light,
       routerConfig: router,
     );
   }
