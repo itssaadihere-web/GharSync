@@ -4,6 +4,51 @@ import '../models/list_item.dart';
 import '../models/task_item.dart';
 
 class FirestoreService {
+  // --- Purchase Item Methods ---
+  Future<void> markItemBought({
+    required String householdId,
+    required String itemId,
+    required String currentUserId,
+    required String currentUserName,
+  }) async {}
+
+  Future<void> markItemPending({
+    required String householdId,
+    required String itemId,
+  }) async {}
+
+  Future<void> deleteItem({
+    required String householdId,
+    required String itemId,
+  }) async {}
+
+  Future<Household> createHousehold({
+    required String familyName,
+    required String creatorUserId,
+    required String creatorName,
+    required String creatorPhone,
+  }) async {
+    return Household(
+      householdId: 'household_${DateTime.now().millisecondsSinceEpoch}',
+      familyName: familyName,
+      createdAt: DateTime.now(),
+    );
+  }
+
+  Future<void> addMemberToHousehold({
+    required String householdId,
+    required String userId,
+    required String name,
+    required String phoneNumber,
+  }) async {}
+
+
+  Future<void> addItem({
+    required String householdId,
+    required ListItem item,
+  }) async {}
+
+  // --- Task Methods ---
   Future<void> claimGeneralTask({
     required String householdId,
     required String taskId,
@@ -34,6 +79,13 @@ class FirestoreService {
     return creatorUserId == currentUserId;
   }
 
+  // --- Household Methods ---
+  Future<void> updateHouseholdDetails({
+    required String householdId,
+    required String newName,
+  }) async {}
+
+  // --- Streams ---
   Stream<List<TaskItem>> streamPendingTasks(String householdId) async* {
     yield [];
   }
@@ -54,8 +106,11 @@ class FirestoreService {
     yield [];
   }
 
-  Future<void> updateHouseholdDetails({
-    required String householdId,
-    required String newName,
-  }) async {}
+  Stream<List<ListItem>> streamAllItems(String householdId) async* {
+    yield [];
+  }
+
+  Stream<List<ListItem>> streamHistoryItems(String householdId) async* {
+    yield [];
+  }
 }

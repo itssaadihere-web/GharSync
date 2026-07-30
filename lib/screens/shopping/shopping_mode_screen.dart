@@ -21,7 +21,7 @@ class ShoppingModeScreen extends ConsumerWidget {
         backgroundColor: AppTheme.primaryDarkEmerald,
         foregroundColor: Colors.white,
         title: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: const [
@@ -128,7 +128,7 @@ class ShoppingModeScreen extends ConsumerWidget {
                 final categoryItems = entry.value;
 
                 return Column(
-                  crossAxisAlignment: CrossAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Store Aisle Category Header
                     Padding(

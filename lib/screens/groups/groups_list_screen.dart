@@ -16,7 +16,7 @@ class GroupsListScreen extends ConsumerWidget {
         backgroundColor: const Color(0xFF075E54), // WhatsApp Green
         foregroundColor: Colors.white,
         title: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('GharSync', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
             Text('👤 $currentUserName', style: const TextStyle(fontSize: 12, color: Colors.white70)),
@@ -34,7 +34,7 @@ class GroupsListScreen extends ConsumerWidget {
         ],
       ),
       body: Column(
-        crossAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Search Bar
           Container(

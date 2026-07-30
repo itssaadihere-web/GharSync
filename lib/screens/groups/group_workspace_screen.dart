@@ -92,7 +92,7 @@ class _GroupWorkspaceScreenState extends ConsumerState<GroupWorkspaceScreen> wit
           onPressed: () => context.go('/groups'),
         ),
         title: Column(
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             Text('Khan Family Household 🏡', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             Text('3 members • 4 pending purchases', style: TextStyle(fontSize: 11, color: Colors.white70)),
@@ -142,7 +142,7 @@ class _GroupWorkspaceScreenState extends ConsumerState<GroupWorkspaceScreen> wit
                             ],
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 msg['sender'],

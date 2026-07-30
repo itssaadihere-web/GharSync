@@ -98,7 +98,7 @@ class _AddItemSheetState extends ConsumerState<AddItemSheet> {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,7 +155,7 @@ class _AddItemSheetState extends ConsumerState<AddItemSheet> {
                 border: Border.all(color: AppTheme.primaryEmerald.withOpacity(0.2)),
               ),
               child: Column(
-                crossAxisAlignment: CrossAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [

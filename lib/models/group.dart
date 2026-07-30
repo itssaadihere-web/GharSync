@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum GroupType { family, office, friends }
 
 class Group {
@@ -23,27 +21,30 @@ class Group {
     this.memberCount = 1,
   });
 
-  factory Group.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data() ?? {};
+  factory Group.fromMap(String id, Map<String, dynamic> data) {
     return Group(
-      groupId: snapshot.id,
+      groupId: id,
       groupName: data['groupName'] ?? 'Family Group',
-      type: data['type'] == 'office' ? GroupType.office : (data['type'] == 'friends' ? GroupType.friends : GroupType.family),
+      type: data['type'] == 'office'
+          ? GroupType.office
+          : (data['type'] == 'friends' ? GroupType.friends : GroupType.family),
       avatar: data['avatar'] ?? '🏡',
       lastMessage: data['lastMessage'] ?? '',
-      lastTime: (data['lastTime'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      lastTime: data['lastTime'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['lastTime'])
+          : DateTime.now(),
       unreadCount: data['unreadCount'] ?? 0,
       memberCount: data['memberCount'] ?? 1,
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toMap() {
     return {
       'groupName': groupName,
       'type': type.name,
       'avatar': avatar,
       'lastMessage': lastMessage,
-      'lastTime': Timestamp.fromDate(lastTime),
+      'lastTime': lastTime.millisecondsSinceEpoch,
       'unreadCount': unreadCount,
       'memberCount': memberCount,
     };

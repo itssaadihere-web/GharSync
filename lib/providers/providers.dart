@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/household.dart';
 import '../models/member.dart';
@@ -14,22 +13,22 @@ final firestoreServiceProvider = Provider<FirestoreService>((ref) => FirestoreSe
 final aiParserServiceProvider = Provider<AiParserService>((ref) => AiParserService());
 final fcmServiceProvider = Provider<FcmService>((ref) => FcmService());
 
-// Auth State Stream Provider
-final authStateProvider = StreamProvider<User?>((ref) {
-  return ref.watch(authServiceProvider).authStateChanges;
+// Auth State — pure Dart, no firebase_auth dependency
+final authStateProvider = StateProvider<AuthUser?>((ref) {
+  return AuthUser(uid: 'u1', displayName: 'Sadi', phoneNumber: '+92 300 1234567');
 });
 
 // Currently Selected Household ID State
-final activeHouseholdIdProvider = StateProvider<String?>((ref) => null);
+final activeHouseholdIdProvider = StateProvider<String?>((ref) => 'g1');
 
 // Current User Profile State (Name, Phone)
 final currentUserNameProvider = StateProvider<String>((ref) {
-  final user = ref.watch(authStateProvider).value;
+  final user = ref.watch(authStateProvider);
   return user?.displayName ?? 'Family Member';
 });
 
 final currentUserPhoneProvider = StateProvider<String>((ref) {
-  final user = ref.watch(authStateProvider).value;
+  final user = ref.watch(authStateProvider);
   return user?.phoneNumber ?? '+92 300 1234567';
 });
 
@@ -85,8 +84,15 @@ final groupedActiveItemsProvider = Provider<Map<ItemCategory, List<ListItem>>>((
     grouped[item.category]?.add(item);
   }
 
-  // Remove empty categories for cleaner rendering
   grouped.removeWhere((key, value) => value.isEmpty);
-
   return grouped;
 });
+
+// Pure Dart Auth User model (replaces firebase_auth User)
+class AuthUser {
+  final String uid;
+  final String? displayName;
+  final String? phoneNumber;
+
+  AuthUser({required this.uid, this.displayName, this.phoneNumber});
+}

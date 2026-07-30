@@ -18,7 +18,8 @@ class ItemTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final householdId = ref.watch(activeHouseholdIdProvider);
-    final currentUserId = ref.watch(authStateProvider).value?.uid ?? 'demo-user';
+    final currentUser = ref.watch(authStateProvider);
+    final currentUserId = currentUser?.uid ?? 'demo-user';
     final currentUserName = ref.watch(currentUserNameProvider);
     final firestoreService = ref.read(firestoreServiceProvider);
 
@@ -124,7 +125,7 @@ class ItemTile extends ConsumerWidget {
                 // Item Details
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [

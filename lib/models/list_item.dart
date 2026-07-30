@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum ItemCategory {
   vegetables,
   dairy,
@@ -113,10 +111,9 @@ class ListItem {
 
   bool get isBought => status == 'bought';
 
-  factory ListItem.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data() ?? {};
+  factory ListItem.fromMap(String id, Map<String, dynamic> data) {
     return ListItem(
-      itemId: snapshot.id,
+      itemId: id,
       itemName: data['itemName'] ?? '',
       quantity: (data['quantity'] as num?)?.toDouble() ?? 1.0,
       unit: data['unit'] ?? 'pcs',
@@ -124,12 +121,16 @@ class ListItem {
       status: data['status'] ?? 'pending',
       addedBy: UserReference.fromMap(data['addedBy']),
       boughtBy: data['boughtBy'] != null ? UserReference.fromMap(data['boughtBy']) : null,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
-      boughtAt: (data['boughtAt'] as Timestamp?)?.toDate(),
+      createdAt: data['createdAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['createdAt'])
+          : DateTime.now(),
+      boughtAt: data['boughtAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['boughtAt'])
+          : null,
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toMap() {
     return {
       'itemName': itemName,
       'quantity': quantity,
@@ -138,8 +139,8 @@ class ListItem {
       'status': status,
       'addedBy': addedBy.toMap(),
       'boughtBy': boughtBy?.toMap(),
-      'createdAt': Timestamp.fromDate(createdAt),
-      'boughtAt': boughtAt != null ? Timestamp.fromDate(boughtAt!) : null,
+      'createdAt': createdAt.millisecondsSinceEpoch,
+      'boughtAt': boughtAt?.millisecondsSinceEpoch,
     };
   }
 

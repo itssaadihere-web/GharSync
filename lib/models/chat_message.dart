@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum MessageType { chat, purchase, task }
 
 class ChatMessage {
@@ -21,28 +19,33 @@ class ChatMessage {
     required this.timestamp,
   });
 
-  factory ChatMessage.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data() ?? {};
+  factory ChatMessage.fromMap(String id, Map<String, dynamic> data) {
     final typeStr = data['type'] ?? 'chat';
     return ChatMessage(
-      messageId: snapshot.id,
+      messageId: id,
       senderId: data['senderId'] ?? '',
       senderName: data['senderName'] ?? 'Member',
       text: data['text'] ?? '',
-      type: typeStr == 'purchase' ? MessageType.purchase : (typeStr == 'task' ? MessageType.task : MessageType.chat),
-      extractedData: data['extractedData'] != null ? Map<String, dynamic>.from(data['extractedData']) : null,
-      timestamp: (data['timestamp'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      type: typeStr == 'purchase'
+          ? MessageType.purchase
+          : (typeStr == 'task' ? MessageType.task : MessageType.chat),
+      extractedData: data['extractedData'] != null
+          ? Map<String, dynamic>.from(data['extractedData'])
+          : null,
+      timestamp: data['timestamp'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['timestamp'])
+          : DateTime.now(),
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toMap() {
     return {
       'senderId': senderId,
       'senderName': senderName,
       'text': text,
       'type': type.name,
       'extractedData': extractedData,
-      'timestamp': Timestamp.fromDate(timestamp),
+      'timestamp': timestamp.millisecondsSinceEpoch,
     };
   }
 }

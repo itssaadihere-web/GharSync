@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class TaskItem {
   final String taskId;
   final String title;
@@ -19,27 +17,28 @@ class TaskItem {
     required this.createdAt,
   });
 
-  factory TaskItem.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data() ?? {};
+  factory TaskItem.fromMap(String id, Map<String, dynamic> data) {
     return TaskItem(
-      taskId: snapshot.id,
+      taskId: id,
       title: data['title'] ?? '',
       assigneeName: data['assigneeName'] ?? 'Family Member',
       dueText: data['dueText'] ?? 'Today',
       status: data['status'] ?? 'pending',
       isSyncedToGoogleTasks: data['isSyncedToGoogleTasks'] ?? true,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: data['createdAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['createdAt'])
+          : DateTime.now(),
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toMap() {
     return {
       'title': title,
       'assigneeName': assigneeName,
       'dueText': dueText,
       'status': status,
       'isSyncedToGoogleTasks': isSyncedToGoogleTasks,
-      'createdAt': Timestamp.fromDate(createdAt),
+      'createdAt': createdAt.millisecondsSinceEpoch,
     };
   }
 }

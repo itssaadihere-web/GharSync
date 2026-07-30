@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum HouseholdRole { admin, member, runner }
 
 extension HouseholdRoleExtension on HouseholdRole {
-  String get name {
+  String get roleName {
     switch (this) {
       case HouseholdRole.admin:
         return 'admin';
@@ -42,23 +40,24 @@ class Member {
     required this.joinedAt,
   });
 
-  factory Member.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot) {
-    final data = snapshot.data() ?? {};
+  factory Member.fromMap(String id, Map<String, dynamic> data) {
     return Member(
-      userId: snapshot.id,
+      userId: id,
       name: data['name'] ?? 'Family Member',
       phoneNumber: data['phoneNumber'] ?? '',
       role: HouseholdRoleExtension.fromString(data['role'] ?? 'member'),
-      joinedAt: (data['joinedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      joinedAt: data['joinedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(data['joinedAt'])
+          : DateTime.now(),
     );
   }
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'phoneNumber': phoneNumber,
-      'role': role.name,
-      'joinedAt': Timestamp.fromDate(joinedAt),
+      'role': role.roleName,
+      'joinedAt': joinedAt.millisecondsSinceEpoch,
     };
   }
 }
