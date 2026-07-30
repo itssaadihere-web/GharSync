@@ -44,7 +44,7 @@ class PaywallScreen extends ConsumerWidget {
                   SizedBox(height: 6),
                   Text(
                     'Simplify grocery management for everyone at home.',
-                    style: TextStyle(color: Colors.white80, fontSize: 13),
+                    style: TextStyle(color: Colors.white70, fontSize: 13),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -97,7 +97,7 @@ class PaywallScreen extends ConsumerWidget {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'PKR 1,499 / year (~$4.99/yr)',
+                        'PKR 1,499 / year (~\$4.99/yr)',
                         style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
                       ),
                     ],

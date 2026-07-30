@@ -19,7 +19,6 @@ class GharSyncApp extends ConsumerWidget {
       title: 'GharSync',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
       routerConfig: router,
     );

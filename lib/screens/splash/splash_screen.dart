@@ -70,7 +70,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               const SizedBox(height: 8),
               const Text(
                 'WhatsApp-Style Family & Workplace Workspace',
-                style: TextStyle(color: Colors.white80, fontSize: 14),
+                style: TextStyle(color: Colors.white70, fontSize: 14),
               ),
               const SizedBox(height: 40),
               const CircularProgressIndicator(color: Colors.white, strokeWidth: 3),

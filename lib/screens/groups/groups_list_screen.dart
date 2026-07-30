@@ -113,7 +113,35 @@ class GroupsListScreen extends ConsumerWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: ListTile,
+      child: ListTile(
+        onTap: () => context.push('/group/$groupId'),
+        leading: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: AppTheme.primaryEmerald.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Center(child: Text(avatar, style: const TextStyle(fontSize: 24))),
+        ),
+        title: Text(name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+        subtitle: Text(lastMsg, maxLines: 1, overflow: TextOverflow.ellipsis,
+            style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(time, style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+            const SizedBox(height: 4),
+            if (unread > 0)
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: const BoxDecoration(color: AppTheme.primaryEmerald, shape: BoxShape.circle),
+                child: Text('$unread', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+              ),
+          ],
+        ),
+      ),
     );
   }
 
