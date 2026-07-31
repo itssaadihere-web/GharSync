@@ -19,3 +19,9 @@ firebase-debug.*.log
 .DS_Store
 .idea/
 *.iml
+
+# Android Signing — NEVER commit these to git
+*.jks
+*.keystore
+android/key.properties
+android/gharsync-release.jks

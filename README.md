@@ -1,84 +1,53 @@
-# 🏡 GharSync Mobile App
+# 🏡 GharSync — Family Household Manager
 
-A cross-platform mobile app built with **Flutter** and **Firebase** (Firestore + Auth + Cloud Functions + Cloud Messaging) for shared household grocery and errand list management.
+[![Build & Release APK](https://github.com/itssaadihere-web/GharSync/actions/workflows/build.yml/badge.svg)](https://github.com/itssaadihere-web/GharSync/actions/workflows/build.yml)
+[![Download APK](https://img.shields.io/github/v/release/itssaadihere-web/GharSync?label=Download%20APK&logo=android&color=3DDC84)](https://github.com/itssaadihere-web/GharSync/releases/latest)
 
----
-
-## 🚀 Key Features
-
-1. **Phone Auth & Household Setup**: OTP phone sign-in with instant family household creation and member invite links.
-2. **Shared Household Checklist**: Real-time synced checklist powered by Firestore snapshot streams (`households/{householdId}/listItems`).
-3. **AI Item Parsing & Categorization**:
-   - Cloud Function (`parseListItem`) invoking Gemini LLM for structured JSON output (`itemName`, `quantity`, `unit`, `category`).
-   - Resilient client-side Dart **Rule-Based Fallback Parser** supporting English and Roman Urdu inputs (e.g. `"2 kilo aloo"`, `"1/2 dozen eggs"`, `"pao tamatar"`, `"dettol soap"`).
-4. **Runner Shopping Mode**: Distraction-free, large-tap-target interface grouped by store aisle (Vegetables, Dairy, Toiletries, Medical, Grocery, Other) with 1-tap "bought" status sync.
-5. **Push Notifications**: Firebase Cloud Messaging (FCM) triggers when items are added or marked bought.
-6. **30-Day History**: Past purchases log per household with 1-tap re-add functionality.
-7. **Phase 2 Stubs**: Voice note recording UI stub, WhatsApp Bot webhook integration banner, and Free vs Premium Paywall screen.
+> **WhatsApp-style family grocery & household management app for Pakistani families**
 
 ---
 
-## 📁 Directory Structure
+## 📥 Download & Install (Free — No Play Store Needed)
 
-```
-GharSync/
-├── lib/
-│   ├── main.dart
-│   ├── theme/
-│   │   └── app_theme.dart
-│   ├── models/
-│   │   ├── household.dart
-│   │   ├── member.dart
-│   │   └── list_item.dart
-│   ├── services/
-│   │   ├── auth_service.dart
-│   │   ├── firestore_service.dart
-│   │   ├── ai_parser_service.dart
-│   │   ├── rule_based_parser.dart
-│   │   └── fcm_service.dart
-│   ├── providers/
-│   │   └── providers.dart
-│   ├── routing/
-│   │   └── app_router.dart
-│   ├── screens/
-│   │   ├── auth/phone_login_screen.dart
-│   │   ├── home/home_screen.dart
-│   │   ├── shopping/shopping_mode_screen.dart
-│   │   ├── history/history_screen.dart
-│   │   ├── household/household_screen.dart
-│   │   └── paywall/paywall_screen.dart
-│   └── widgets/
-│       ├── add_item_sheet.dart
-│       ├── item_tile.dart
-│       └── phase2_banners.dart
-├── functions/
-│   ├── package.json
-│   ├── tsconfig.json
-│   └── src/
-│       └── index.ts
-├── firebase.json
-├── firestore.rules
-├── firestore.indexes.json
-└── pubspec.yaml
-```
+### Android
+1. Click the **Download APK** badge above (or go to [Releases](https://github.com/itssaadihere-web/GharSync/releases/latest))
+2. Download `GharSync-vX.X.apk`
+3. On your phone: **Settings → Security → Unknown Sources → Enable**
+4. Open the downloaded APK → tap **Install**
+5. Done! ✅
 
 ---
 
-## 🛠️ Deploying Cloud Functions & Rules
+## ✨ Features
 
-1. Install Firebase CLI:
-   ```bash
-   npm install -g firebase-tools
-   ```
-2. Initialize and deploy rules/functions:
-   ```bash
-   firebase login
-   firebase use --add <your-firebase-project-id>
-   firebase deploy --only firestore:rules,firestore:indexes
-   cd functions && npm install && npm run build
-   firebase deploy --only functions
-   ```
-3. Set Gemini API Key in Cloud Functions (Optional):
-   ```bash
-   firebase functions:secrets:set GEMINI_API_KEY
-   ```
+| Feature | Status |
+|---------|--------|
+| 🛒 Shared grocery list with family | ✅ Live |
+| 👨‍👩‍👧 Multiple household members | ✅ Live |
+| ✅ Mark items bought / pending | ✅ Live |
+| 🗂️ Auto-categorize items (Vegetables, Dairy, etc.) | ✅ Live |
+| 🧠 AI item parser (Urdu + Roman Urdu) | ✅ Live |
+| 🔔 Push notifications | 🔜 Phase 2 |
+| 🎤 Voice input | 🔜 Phase 2 |
+| 💬 WhatsApp Bot integration | 🔜 Phase 2 |
+
+---
+
+## 🔧 Built With
+
+- **Flutter** — Cross-platform mobile framework
+- **Riverpod** — State management
+- **GoRouter** — Navigation
+- **Google Fonts** — Typography
+
+---
+
+## 👨‍💻 Developer
+
+Built by **Saadi** — for Pakistani families to manage their household together.
+
+---
+
+## 📄 License
+
+This project is private. All rights reserved.
